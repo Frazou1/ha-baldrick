@@ -43,7 +43,8 @@ class BaldrickApi:
                     return json.loads(await resp.text())
                 return None
         except (aiohttp.ClientError, TimeoutError, ValueError) as err:
-            raise BaldrickError(f"{method} {path}: {err}") from err
+            # TimeoutError n'a pas de message : on ajoute le type / TimeoutError has no message: add the type
+            raise BaldrickError(f"{method} {self._base}/{path}: {type(err).__name__} {err}") from err
 
     async def async_get_state(self) -> dict[str, Any]:
         return await self._request("GET", "system_state")
