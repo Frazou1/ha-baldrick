@@ -3,7 +3,7 @@
 HTTP client for the Baldrick web interface ("turnip" firmware).
 
 Points d'accès utilisés / Endpoints used:
-  GET  /system_state                -> état de la carte, mode test, température
+  GET  /system_state                -> état, mode test, température / state, test mode, temperature
   GET  /turnip_test_ui/patterns     -> motifs de test disponibles / available test patterns
   POST /turnip_test/test_config     -> active/désactive le mode test / toggles test mode (JSON)
 """
