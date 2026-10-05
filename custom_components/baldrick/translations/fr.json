@@ -1,0 +1,16 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Baldrick (iLightThat)",
+        "description": "Adresse IP ou nom d'hôte de la carte Baldrick.",
+        "data": { "host": "Hôte" }
+      }
+    },
+    "error": { "cannot_connect": "Impossible de joindre l'interface web de la carte." },
+    "abort": { "already_configured": "Cette carte est déjà configurée." }
+  },
+  "entity": {
+    "sensor": { "temperature": { "name": "Température" } }
+  }
+}
