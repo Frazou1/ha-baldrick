@@ -13,7 +13,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import BaldrickApi
 from .coordinator import BaldrickCoordinator
 
-PLATFORMS: list[Platform] = [Platform.LIGHT, Platform.SENSOR]
+PLATFORMS: list[Platform] = [Platform.LIGHT, Platform.SELECT, Platform.SENSOR]
 
 type BaldrickConfigEntry = ConfigEntry[BaldrickCoordinator]
 

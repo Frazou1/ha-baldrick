@@ -4,13 +4,34 @@
       "user": {
         "title": "Baldrick (iLightThat)",
         "description": "IP address or hostname of the Baldrick board.",
-        "data": { "host": "Host" }
+        "data": {
+          "host": "Host"
+        }
       }
     },
-    "error": { "cannot_connect": "Unable to reach the board's web interface." },
-    "abort": { "already_configured": "This board is already configured." }
+    "error": {
+      "cannot_connect": "Unable to reach the board's web interface."
+    },
+    "abort": {
+      "already_configured": "This board is already configured."
+    }
   },
   "entity": {
-    "sensor": { "temperature": { "name": "Temperature" } }
+    "sensor": {
+      "temperature": {
+        "name": "Temperature"
+      }
+    },
+    "select": {
+      "effect_speed": {
+        "name": "Effect speed",
+        "state": {
+          "static": "Static",
+          "slow": "Slow",
+          "regular": "Regular",
+          "fast": "Fast"
+        }
+      }
+    }
   }
 }
