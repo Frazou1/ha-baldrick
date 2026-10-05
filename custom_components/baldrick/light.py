@@ -5,6 +5,7 @@ Baldrick light driven by the board's built-in test mode.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from homeassistant.components.light import (
@@ -38,6 +39,18 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     async_add_entities([BaldrickLight(entry.runtime_data)])
+
+
+def _valid_ports(ports: str | None) -> str:
+    """Garde la sélection de ports de la carte seulement si elle est valide.
+
+    Keep the board's port selection only when it is valid ("all_pixel" or "1,3,").
+    Après un redémarrage la carte peut renvoyer « | » (aucun port) : rien ne s'allumerait.
+    After a reboot the board may report "|" (no port): nothing would light up.
+    """
+    if ports and re.fullmatch(r"all_\w+|(\d+,)+", ports):
+        return ports
+    return DEFAULT_TEST_PORTS
 
 
 def _hex_to_rgb(value: str) -> tuple[int, int, int]:
@@ -82,8 +95,9 @@ class BaldrickLight(BaldrickEntity, LightEntity):
 
     @property
     def brightness(self) -> int:
-        # Carte : 0-100 %, HA : 0-255 / Board: 0-100 %, HA: 0-255
-        return round(self._state.get("test_brightness", 100) * 255 / 100)
+        # Carte : 0-100 %, HA : 0-255. Après un redémarrage la carte peut renvoyer 0 : on prend 100 %
+        # Board: 0-100 %, HA: 0-255. After a reboot the board may report 0: use 100 %
+        return round((self._state.get("test_brightness") or 100) * 255 / 100)
 
     @property
     def rgb_color(self) -> tuple[int, int, int]:
@@ -118,7 +132,7 @@ class BaldrickLight(BaldrickEntity, LightEntity):
                 "test_colour_picked_g": g,
                 "test_colour_picked_b": b,
                 "test_dmx_preset": state.get("test_dmx_preset", 0),
-                "test_ports": state.get("test_ports") or DEFAULT_TEST_PORTS,
+                "test_ports": _valid_ports(state.get("test_ports")),
                 "test_target": state.get("test_target") or DEFAULT_TEST_TARGET,
             }
         )
