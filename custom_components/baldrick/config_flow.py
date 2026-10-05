@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 import voluptuous as vol
@@ -13,6 +14,8 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import BaldrickApi, BaldrickError
 from .const import DOMAIN
 
+_LOGGER = logging.getLogger(__name__)
+
 
 class BaldrickConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
@@ -20,11 +23,14 @@ class BaldrickConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         errors: dict[str, str] = {}
         if user_input is not None:
-            host = user_input[CONF_HOST].strip()
+            # Accepte aussi « http://192.168.x.x/ » / Also accept "http://192.168.x.x/"
+            host = user_input[CONF_HOST].strip().removeprefix("http://").removeprefix("https://")
+            host = host.split("/", 1)[0]
             api = BaldrickApi(async_get_clientsession(self.hass), host)
             try:
                 state = await api.async_get_state()
-            except BaldrickError:
+            except BaldrickError as err:
+                _LOGGER.warning("Carte Baldrick injoignable / Baldrick board unreachable: %s", err)
                 errors["base"] = "cannot_connect"
             else:
                 # board_id = adresse MAC, stable même si l'IP change
