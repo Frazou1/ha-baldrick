@@ -1,0 +1,12 @@
+{
+  "domain": "baldrick",
+  "name": "Baldrick (iLightThat)",
+  "codeowners": ["@Frazou1"],
+  "config_flow": true,
+  "documentation": "https://github.com/Frazou1/ha-baldrick",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/Frazou1/ha-baldrick/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
